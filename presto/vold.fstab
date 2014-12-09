@@ -1,0 +1,8 @@
+# internal sdcard
+dev_mount sdcard /storage/sdcard0 27 /devices/platform/msm_sdcc.1/mmc_host
+
+# external sdcard
+dev_mount external_sd /storage/sdcard1 auto /devices/platform/msm_sdcc.3/mmc_host
+
+# otg sdcard
+#dev_mount usbdisk /storage/usbdisk auto /devices/platform/msm_hsusb_host.0

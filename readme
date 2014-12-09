@@ -1,0 +1,20 @@
+This makes a modified perst build.  Modified as in blkmmc0p14 is system and blkmmc0p27 is data.  This gives the presto 12g shared data/sdcard partition.
+This also uses mtp instead of mass storage.
+
+This will of course erase the internal sdcard.
+
+When built, go into bootloader and fastboot flash recovery recovery.img first.
+then boot into recovery. in recovery go to mounts and storage, and format /data and /data/media (sdcard) when done mount /data then from a computer go into adb shell
+
+mkdir /data/media
+mkdir /data/media/0
+chown -R media_rw media_rw /data/media
+chown -R media_rw media_rw /data/media/0
+
+exit
+
+now flash the build and gapps, and reboot into system
+
+Note , it will take a few minutes for mtp to initialize and internal and sdcard to show up.
+
+
