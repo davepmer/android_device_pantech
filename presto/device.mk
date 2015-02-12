@@ -28,11 +28,14 @@ PRODUCT_COPY_FILES += device/common/gps/gps.conf_US_SUPL:system/etc/gps.conf
 PRODUCT_AAPT_CONFIG := normal hdpi
 PRODUCT_AAPT_PREF_CONFIG := hdpi
 
+# Frameworks base fixes
+#FRAMEWORKS_BASE_SUBDIRS += ../../$(LOCAL_PATH)/frameworks/
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
-# Radio fixes
-FRAMEWORKS_BASE_SUBDIRS += ../../$(LOCAL_PATH)/ril/
+# Recovery
+TARGET_RECOVERY_FSTAB = device/pantech/presto/fstab.qcom
 
 #----------------------------------------------------------------------
 
@@ -44,8 +47,12 @@ PRODUCT_COPY_FILES += \
 #----------------------------------------------------------------------
 
 # Bluetooth firmware BCM
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/prebuilt/system/bin/BCM43291A0_003.001.013.0141.0194.hcd:system/bin/BCM43291A0_003.001.013.0141.0194.hcd
+
+# Bins
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/system/bin/BCM43291A0_003.001.013.0141.0194.hcd:system/bin/BCM43291A0_003.001.013.0141.0194.hcd
+    $(LOCAL_PATH)/prebuilt/system/bin/mpdecision:system/bin/mpdecision
+    $(LOCAL_PATH)/prebuilt/system/bin/qrngd:system/bin/qrngd
 
 # IDC
 PRODUCT_COPY_FILES += \
@@ -53,59 +60,82 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/system/usr/idc/qt602240_ts_input.idc:system/usr/idc/qt602240_ts_input.idc
 
 # Keyboardy
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/prebuilt/system/usr/keylayout/tki_input.kl:system/usr/keylayout/tki_input.kl
+
+# Media configuration
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/system/usr/keylayout/tki_input.kl:system/usr/keylayout/tki_input.kl
+    $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
 
 # Permissions
+PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
+
+# Ramdisk
 PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
+    $(LOCAL_PATH)/rootdir/etc/init.presto.usb.rc:root/init.presto.usb.rc \
+    $(LOCAL_PATH)/rootdir/etc/ueventd.presto.rc:root/ueventd.rc
 
 # Recovery
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/recovery.fstab:recovery/root/recovery.fstab \
-    $(LOCAL_PATH)/recovery.fstab:recovery/root/etc/recovery.fstab \
-    $(LOCAL_PATH)/pad.sh:pad.sh
-
-# uevent.rc
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/etc/ueventd.presto.rc:root/ueventd.rc \
-    $(LOCAL_PATH)/rootdir/etc/twrp.fstab:/recovery/root/etc/twrp.fstab \
-    $(LOCAL_PATH)/rootdir/etc/twrp.fstab:/recovery/root/etc/extra.fstab \
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/etc/init.pantech.usb.rc:root/init.pantech.usb.rc
-
-#CPU MGMNT ##binary from LG NITRO HD##
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/system/bin/mpdecision:system/bin/mpdecision
-
-
-# Wifi (bcmdhd)
-#WIFI_BAND := 802_11_ABG
-#$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4329/device-bcm.mk)
+#PRODUCT_COPY_FILES += $(LOCAL_PATH)/recovery.fstab:root/recovery.fstab
 
 #----------------------------------------------------------------------
 
+# Audio
+PRODUCT_PACKAGES += audio.primary.msm8660
+
+# Camera
+#PRODUCT_PACKAGES += camera.presto
+
 # FM Radio
 #PRODUCT_PACKAGES += FmRadioReceiver
-# Camera
-PRODUCT_PACKAGES += Camera
+
+# Presto Settings
+PRODUCT_PACKAGES += AdvancedSettings
+
 # Ramdisk
-PRODUCT_PACKAGES += init.presto.rc
+PRODUCT_PACKAGES += \
+    init.presto.rc \
+    init.qcom.baseband.sh
 
 # Sky_touch
 PRODUCT_PACKAGES += libsky_touch
 
-# Presto Settings
-PRODUCT_PACKAGES += PrestoParts
+# Torch
+PRODUCT_PACKAGES += \
+    Apollo \
+    Torch
 
-# audio with Audience A2020
-PRODUCT_PACKAGES += audio.primary.presto
+# USB
+PRODUCT_PACKAGES += com.android.future.usb.accessory
+
+# Wallpapers
+PRODUCT_PACKAGES += \
+    Galaxy4 \
+    HoloSpiralWallpaper \
+    MagicSmokeWallpapers \
+    NoiseField \
+    PhaseBeam
 
 # wifi/bt mac helper
-PRODUCT_PACKAGES += hwaddrs
+PRODUCT_PACKAGES += \
+    hwaddrs \
+    liblog
+
+#----------------------------------------------------------------------
+
+# Device properties
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.bt.bdaddr_path=/data/misc/bd_addr \
+    ro.sf.lcd_density=240 \
+    telephony.lteOnGsmDevice=1
+
 #----------------------------------------------------------------------
 
 # inherit pantech/msm8660-common
 $(call inherit-product-if-exists, device/pantech/msm8660-common/msm8660-common.mk)
-$(call inherit-product, frameworks/base/data/sounds/AudioPackage10.mk)
+
+# Wifi
+$(call inherit-product, device/pantech/presto/wifi/device-bcm.mk)
+
+#  Also get non-open-source vendor/pantech/msm8x60-common
+$(call inherit-product-if-exists, vendor/pantech/msm8x60-common/msm8x60-common-vendor.mk)

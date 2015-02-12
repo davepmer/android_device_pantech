@@ -17,50 +17,47 @@
 #----------------------------------------------------------------------
 
 # Overlays
-DEVICE_PACKAGE_OVERLAYS := device/pantech/msm8660-common/overlay
+DEVICE_PACKAGE_OVERLAYS += device/pantech/msm8660-common/overlay
 
 #----------------------------------------------------------------------
 
 # Audio policy
-PRODUCT_COPY_FILES += \
-    device/pantech/msm8660-common/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf
+#PRODUCT_COPY_FILES += device/pantech/msm8660-common/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf
 
 # Bluetooth configuration files
-PRODUCT_COPY_FILES += \
-    system/bluetooth/data/main.conf:system/etc/bluetooth/main.conf
-
-# Firmware
-PRODUCT_COPY_FILES += \
-    device/pantech/msm8660-common/prebuilt/system/etc/firmware/a225_pfp.fw:system/etc/firmware/a225_pfp.fw \
-    device/pantech/msm8660-common/prebuilt/system/etc/firmware/a225_pm4.fw:system/etc/firmware/a225_pm4.fw \
-    device/pantech/msm8660-common/prebuilt/system/etc/firmware/a225p5_pm4.fw:system/etc/firmware/a225p5_pm4.fw \
-    device/pantech/msm8660-common/prebuilt/system/etc/firmware/a300_pfp.fw:system/etc/firmware/a300_pfp.fw \
-    device/pantech/msm8660-common/prebuilt/system/etc/firmware/a300_pm4.fw:system/etc/firmware/a300_pm4.fw
-
-# Media configuration
-PRODUCT_COPY_FILES += \
-    device/pantech/msm8660-common/media/media_profiles.xml:system/etc/media_profiles.xml \
-    device/pantech/msm8660-common/media/media_codecs.xml:system/etc/media_codecs.xml
+#PRODUCT_COPY_FILES += system/bluetooth/data/main.conf:system/etc/bluetooth/main.conf
 
 # Thermal configuration
-PRODUCT_COPY_FILES += \
-    device/pantech/msm8660-common/prebuilt/system/etc/thermald.conf:system/etc/thermald.conf
+PRODUCT_COPY_FILES += device/pantech/msm8660-common/prebuilt/system/etc/thermald.conf:system/etc/thermald.conf
 
 #----------------------------------------------------------------------
 
+# Charger
+PRODUCT_PACKAGES += \
+    charger \
+    charger_res_images
+
 # fstab.qcom
 PRODUCT_PACKAGES += fstab.qcom
-
-# GPS
-PRODUCT_PACKAGES += gps.msm8660
 
 # Lpm
 PRODUCT_PACKAGES += \
     lpm.rc \
     init.qcom.lpm_boot.sh
 
-# Sensors
-PRODUCT_PACKAGES += sensors.msm8660
+# msm8660
+PRODUCT_PACKAGES += \
+    audio_policy.msm8660 \
+    camera.msm8660 \
+    copybit.msm8660 \
+    gestures.msm8660 \
+    gps.msm8660 \
+    gralloc.msm8660 \
+    hwcomposer.msm8660 \
+    lights.msm8660 \
+    memtrack.msm8660 \
+    power.msm8660 \
+    sensors.msm8660
 
 #----------------------------------------------------------------------
 
@@ -73,12 +70,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.composition.type=dyn \
     debug.egl.hw=1 \
     debug.enabletr=true \
-    debug.mdpcomp.maxlayer=0 \
-    debug.mdpcomp.logs=0 \
     debug.sf.hw=1 \
     dev.pm.dyn_samplingrate=1 \
-    ro.sf.lcd_density=240 \
-    ro.bt.bdaddr_path=/data/misc/bd_addr
+    debug.mdpcomp.maxlayer=3 \
+    debug.mdpcomp.logs=0 \
+    debug.hwc.dynThreshold=1.9 \
+    lpa.decode=false
 
 # Misc
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -94,5 +91,5 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 #----------------------------------------------------------------------
 
-# inherit pantech/qcom-common
-$(call inherit-product-if-exists, device/pantech/qcom-common/qcom-common.mk)
+# inherit pantech/msm8x60-common
+$(call inherit-product-if-exists, device/pantech/msm8x60-common/msm8x60-common.mk)

@@ -18,8 +18,8 @@
 
 BOARD_VENDOR := pantech
 
-# inherit from pantech qcom-common
--include device/pantech/qcom-common/BoardConfigCommon.mk
+# inherit from pantech msm8x60-common
+-include device/pantech/msm8x60-common/BoardConfigCommon.mk
 
 #----------------------------------------------------------------------
 
@@ -28,10 +28,13 @@ TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
 TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
 TARGET_CPU_SMP := true
 ARCH_ARM_HAVE_TLS_REGISTER := true
+TARGET_CPU_VARIANT := scorpion
+TARGET_USE_SCORPION_BIONIC_OPTIMIZATION := true
 
 # Audio
-#BOARD_USES_ALSA_AUDIO := true
-#TARGET_QCOM_AUDIO_VARIANT := caf
+BOARD_QCOM_TUNNEL_LPA_ENABLED := true
+BOARD_QCOM_VOIP_ENABLED := true
+#BOARD_USES_ALSA_AUDIO := false
 
 # Bluetooth
 TARGET_NEEDS_BLUETOOTH_INIT_DELAY := true
@@ -41,10 +44,8 @@ BOARD_HAS_NO_MISC_PARTITION := true
 BOARD_USES_MMCUTILS := true
 
 # Flags
-COMMON_GLOBAL_CFLAGS += -DWITH_QCOM_LPA
-COMMON_GLOBAL_CFLAGS += -DQCOM_ACDB_ENABLED
-COMMON_GLOBAL_CFLAGS += -DQCOM_VOIP_ENABLED
-#COMMON_GLOBAL_CFLAGS += -DLEGACY_QCOM_VOICE
+#COMMON_GLOBAL_CFLAGS += -DQCOM_ACDB_ENABLED
+COMMON_GLOBAL_CFLAGS += -DQCOM_BSP
 
 # GPS
 BOARD_USES_QCOM_GPS := true
@@ -54,27 +55,29 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
 #TARGET_NO_RPC := true
 
 # Graphics
-#BOARD_HAVE_OLD_ION_API := true
-COMMON_GLOBAL_CFLAGS += -DQCOM_NO_SECURE_PLAYBACK
-TARGET_NO_HW_VSYNC := true
-#TARGET_QCOM_DISPLAY_VARIANT := caf
+#COMMON_GLOBAL_CFLAGS += -DQCOM_NO_SECURE_PLAYBACK
+#TARGET_NO_HW_VSYNC := true
 
 # Platform
 TARGET_BOARD_PLATFORM := msm8660
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
-#TARGET_ARCH_VARIANT_CPU := cortex-a8
 
-# QCOM Scorpion optimizations
-TARGET_USE_SCORPION_BIONIC_OPTIMIZATION := true
-TARGET_USE_SCORPION_PLD_SET := true
-TARGET_SCORPION_BIONIC_PLDOFFS := 6
-TARGET_SCORPION_BIONIC_PLDSIZE := 128
+# Power/Charger
+BOARD_CHARGER_RES := device/pantech/msm8660-common/charger
+#BOARD_CHARGING_MODE_BOOTING_LPM := /sys/class/power_supply/battery/batt_lp_charging
+#BOARD_BATTERY_DEVICE_NAME := "battery"
+TARGET_POWERHAL_VARIANT := cm
 
 # Target info
+TARGET_DISPLAY_INSECURE_MM_HEAP := true
 TARGET_NO_BOOTLOADER := true
-TARGET_NO_KERNEL := false
+TARGET_NO_KERNEL     := false
 TARGET_NO_RADIOIMAGE := true
-TARGET_USES_OVERLAY := true
+#TARGET_USES_OVERLAY := true
+TARGET_USES_QCOM_BSP := true
 
 # Time - Add support for kernel user helpers and gettimeofday() in bionic
 #KERNEL_HAS_GETTIMEOFDAY_HELPER := true
+
+# Add QC Video Enhancements flag
+TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
