@@ -1,3 +1,5 @@
+CM-11.0 is expirmental Not ye ready for use
+
 This makes a modified perst build.  Modified as in blkmmc0p14 is system and blkmmc0p27 is data.  This gives the presto 12g shared data/sdcard partition.
 This also uses mtp instead of mass storage.
 
